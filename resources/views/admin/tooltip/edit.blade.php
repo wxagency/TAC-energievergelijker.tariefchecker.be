@@ -1,0 +1,136 @@
+@extends('layouts.admin-layout')
+
+@section('title', 'ToolTip data')
+
+
+
+@section('content')
+  <!-- begin:: Content -->
+            <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+              <div class="row">
+                  
+                <div class="col-md-12">
+                    
+                  <!--begin::Portlet-->
+                  <div class="kt-portlet">
+                    <div class="kt-portlet__head">
+                      <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                          Edit ToolTip Content
+                        </h3>
+                      </div>
+                      <div class="kt-portlet__head-tools">
+                    
+                     </div>
+                    </div>
+
+                    <!--begin::Form-->
+                  
+                      <form class="kt-form kt-form--label-right" method="POST" action="{{route('tooltip.update',$tooltip->id)}}" enctype="multipart/form-data" files="true">
+                        {{csrf_field()}}
+                        
+                        <input type="hidden" name="_method" value ="PUT"/>
+                      <div class="kt-portlet__body"> 
+                          <div class="form-group row {{ $errors->has('field_name') ? ' has-danger' : '' }}">
+                              <label for="example-search-input" class="col-3 col-form-label" rel="tooltip" title="Name of page to edit banner">Field</label>
+                              <div class="col-8">
+                                  <input class="form-control" type="text" name="field_name" id="field_name" value="{{$tooltip->field_name}}" disabled="disabled">
+                                    @if ($errors->has('field_name'))
+                                  <div id="first_name-error" class="form-control-feedback text-danger">{{ $errors->first('field_name') }}</div>
+                                  @endif
+                              </div>
+                          </div>
+                          <div class="form-group row {{ $errors->has('NL_tooltip') ? ' has-danger' : '' }}">
+                              <label for="example-search-input" class="col-3 col-form-label" rel="tooltip" title="Banner content in dutch">Tooltip in Dutch</label>
+                              <div class="col-8">
+                                  <input class="form-control" type="text" name="NL_tooltip" id="NL_tooltip" value="{{$tooltip->NL_tooltip}}">
+                                    @if ($errors->has('NL_tooltip'))
+                                  <div id="first_name-error" class="form-control-feedback text-danger">{{ $errors->first('NL_tooltip') }}</div>
+                                  @endif
+                              </div>
+                          </div>
+                          <div class="form-group row {{ $errors->has('FR_tooltip') ? ' has-danger' : '' }}">
+                              <label for="example-search-input" class="col-3 col-form-label" rel="tooltip" title="Banner content in french">Tooltip in French</label>
+                              <div class="col-8">
+                                  <input class="form-control" type="text" name="FR_tooltip" id="FR_tooltip" value="{{$tooltip->FR_tooltip}}">
+                                    @if ($errors->has('FR_tooltip'))
+                                  <div id="first_name-error" class="form-control-feedback text-danger">{{ $errors->first('FR_tooltip') }}</div>
+                                  @endif
+                              </div>
+                          </div>
+                        
+
+                        <div class="clearfix"></div>
+                        <div class="offset-5 kt-portlet__foot kt-portlet__foot--fit ">
+                            <div class="kt-form__actions">
+                                <button type="submit" class="btn btn-success submit" rel="tooltip" title="Save banner contents">
+                                    Save Changes
+                                </button>
+                                <input type="hidden" value="{{ csrf_token() }}" name="_token">
+                            </div>
+                        </div>
+                    </form>
+                  </div>
+
+                  <!--end::Portlet-->
+                </div>
+
+
+              
+              </div>
+            </div>
+
+            <!-- end:: Content -->
+
+  @endsection
+ 
+
+@push('scripts')
+  <script type="text/javascript">
+ 
+      var SummernoteDemo = function () {
+        var demos = function () {
+            $('#summernote').summernote({
+                height: 150,
+                toolbar: [
+                    ["style", ["style"]],
+                    ["font", ["bold", "underline", "clear"]],
+                    ["fontname", ["fontname"]],
+                    ["color", ["color"]],
+                    ["para", ["ul", "ol", "paragraph"]],
+                    ["table", ["table"]],
+                    ["view", ["fullscreen", "codeview", "help"]]
+                ],
+            });
+            $('#summernote').on('summernote.keydown', function (we, e) {
+                var code = $('#summernote').summernote('code');
+                code = code.replace(/(<([^>]+)>)/ig, "");
+                code = code.replace(/&nbsp;/g, '');
+                var key = e.keyCode;
+                var text_max = 255;
+                var text_length = code.length;
+                var text_remaining = text_max - text_length;
+                $('#message_count').html(text_remaining + ' characters remaining');
+                allowed_keys = [8, 37, 38, 39, 40, 46, 32, 13]
+                if ($.inArray(key, allowed_keys) != -1)
+                    return true
+                else if (code.length >= 255) {
+                    e.preventDefault();
+                    e.stopPropagation()
+                }
+            });
+        }
+        return {
+            init: function () {
+                demos();
+            }
+        };
+    }();
+</script>
+@endpush
+
+
+
+
+
+
